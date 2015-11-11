@@ -1,5 +1,5 @@
 complete <- function(directory, id= 1:332) {
-    files <- list.files("Introduction to R programming/Week 2/Programming Assignment 1, Air Pollution/specdata/", full.names = TRUE);
+    files <- list.files(directory, full.names = TRUE);
     completeCases <- data.frame();
     
     for(index in id) {
@@ -9,6 +9,6 @@ complete <- function(directory, id= 1:332) {
         completeCases <- rbind(completeCases, c(index, nrow(NaNN)));
     }
     
-    names(completeCases) <- c("ID", "Nobs");
+    names(completeCases) <- c("ID", "nobs");
     completeCases;
 }
