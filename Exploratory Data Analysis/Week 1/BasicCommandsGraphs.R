@@ -1,15 +1,23 @@
+##Random vars
 x <- rnorm (100)
-hist(x)
 y <- rnorm(100)
+
+##Histogram
+hist(x)
+
+##basic plot
 plot(x, y)
-z <- rnorm(100)
-plot(x, z)
-par(mar = c(2, 2, 2, 2))
-plot(x, y, pch=10)
 title("Scatterplot")
+par(mar = c(2, 2, 2, 2))
+##pch is for the type of 'dot' you want.
+plot(x, y, pch=10)
+
+##Set text, legend and fit graph to certain size/marin.
 text(-2, -2, "Label")
 legend("topleft", legend="Data", pch=20)
 fit <- lm(y ~ x)
+
+##Add a straight line to your graph
 abline(fit)
 abline(fit, lwd = 3, col = "blue")
 
@@ -38,4 +46,4 @@ plot(x, y, type = "n")
 
 ##Subset only males
 points(x[g == "Male"], y[g == "Male"], col = "green")
-points(x[g == "Female"], y[g == "Female"], col = "blue", pch = 19)
+points(x[g == "Female"], y[g == "Female"], col = "blue", pch = 17)
