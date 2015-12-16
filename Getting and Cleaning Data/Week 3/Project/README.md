@@ -4,7 +4,8 @@ This repository contains the R code and documentation files for the Coursera Dat
 Information about the dataset that has been used can be found here: <a href="http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones">Human Activity Recognition Using Smartphones</a>
 
 #Files
-This code takes for granted that the code is present in a folder in this same folder named `UCI HAR Dataset`.
+This code takes for granted that the data is present in a folder in a folder named `UCI HAR Dataset`. This
+folder named above should be present in the same folder as the project files.
 
 `Codebook.md` contains a description for all the variables.
 
