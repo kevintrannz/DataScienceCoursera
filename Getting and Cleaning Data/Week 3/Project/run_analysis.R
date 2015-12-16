@@ -27,6 +27,8 @@ features <- read.table("UCI HAR Dataset/features.txt")
 ## get only columns with mean() or std() in their names.
 mean_and_std_features <- grep("-(mean|std)\\(\\)", features[, 2])
 
+mean_and_std_features
+
 ##Subset desired columns
 x_data <- x_data[, mean_and_std_features]
 
