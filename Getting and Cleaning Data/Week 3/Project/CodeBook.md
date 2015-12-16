@@ -3,7 +3,7 @@ The script `run_analysis.R` performs the five steps described in the course proj
 below and they can be found in the script as well.
 
 <ol>
-<li>First, all the similar data is merged using the 'rbind()' function. By similar, we address those files having the same number
+<li>First, all the similar data is merged using the `rbind()` function. By similar, we address those files having the same number
 of columns and referring to the same entities.</li>
 <li>Second, the measurements on the mean and standard eviation are extracted using the `grep` function. Together with the outcome of the
 `grep` function a subset is done on the `x_data` dataset. Then the (column)names of `x_data` are changed using a subset of the `features` variable.</li>
