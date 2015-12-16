@@ -36,7 +36,7 @@ x_data <- x_data[, mean_and_std_features]
 names(x_data) <- features[mean_and_std_features, 2]
 
 
-## Step 3. Uses descriptive activity names to name the activities in the data set
+## Step 3: Uses descriptive activity names to name the activities in the data set
 activity_labels <- read.table("UCI HAR Dataset/activity_labels.txt")
 
 # update values with correct activity names
@@ -46,7 +46,7 @@ y_data[, 1] <- activity_labels[y_data[, 1], 2]
 names(y_data) <- "activity"
 
 
-## step 4. Appropriately labels the data set with descriptive variable names. 
+## step 4: Appropriately labels the data set with descriptive variable names. 
 
 ## Change column name
 names(subject_data) <- "Subject"
@@ -55,7 +55,7 @@ names(subject_data) <- "Subject"
 data_all <- cbind(x_data, y_data, subject_data)
 
 
-## Step 5. From the data set in step 4, creates a second, independent tidy data set 
+## Step 5: From the data set in step 4, creates a second, independent tidy data set 
 ## with the average of each variable for each activity and each subject.
 library(dplyr)
 
@@ -67,16 +67,3 @@ data_AVG <- data_all %>%
 
 #Create txt file containing the output
 write.table(data_AVG, "data_AVG.txt", row.names = FALSE)
-
-
-##Make sure I have the following:
-
-##Please upload the tidy data set created in step 5 of the instructions. 
-##Please upload your data set as a txt file created with write.table() using row.name=FALSE 
-##(do not cut and paste a dataset directly into the text box, as this may cause errors saving your submission).
-
-
-##Please submit a link to a Github repo with the code for performing your analysis. The code should have 
-##a file run_analysis.R in the main directory that can be run as long as the Samsung data is in your working directory. 
-##The output should be the tidy data set you submitted for part 1. You should include a README.md in the repo describing 
-##how the script works and the code book describing the variables.
