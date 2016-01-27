@@ -1,0 +1,137 @@
+---
+title: "Impact of weather events on population health & economy in the US between 1950-2011"
+author: "Mick van Hulst"
+date: "27-01-2016"
+output: html_document
+---
+##Synopsis
+In this assignment a data set was used to calculate what impact certain weather events had on the population health and economy in the US between 1950 and 2011.
+The data was mostly processed using the R package called 'dPlyr'. Using this package the total fatalities, injuries, property damage and crop damage per
+event type were calculated. Fatalities and injuries were used to answer the question what events types was the most harmful with respect to
+population health. Property damage and crop damage were combined and then used to answer the question which events had the greatest economic consequences.
+
+As a result it was concluded that across the US, tornadoes, excessive heat, and flash floods are most harmful with respect to population health.
+The second conclusion was that tornadoes, thunderstorm winds, and flash floods have the greatest economic consequences.
+
+The data used was taken from the [National Weather Service Instruction 10-1605](https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2Fpd01016005curr.pdf).
+
+##Data processing
+Loading packages
+```{r}
+library(dplyr)
+library(ggplot2)
+```
+
+Setting WD and loading data.
+```{r}
+setwd("C:/DataScienceCoursera/Reproducable research/Week 4/Project/")
+data <- read.csv("repdata-data-StormData.csv", header = TRUE)
+```
+
+Previewing data
+```{r}
+head(data)
+```
+
+Creating function that checks the inserted 'char' for certain values, which then assigns the corresponding multiplier. This function is created
+because the crop and property damage columns had multipliers which had to be converted to calculate a total amount of crop & property damage per
+event type. The function returns the converted value in billions.
+```{r}
+multiplyConv <- function(value, char) {
+    multiply <- 1
+    
+    if(char == "H") {
+        multiply <- 100
+    }
+    else if (char == "K") {
+        multiply <- 1000
+    }
+    else if (char == "M") {
+        multiply <- 1000000
+    }
+    else if (char == "B") {
+        multiply <- 1000000000
+    }
+    
+    return(value * multiply / 1000000000)
+}
+```
+
+Note: The steps below could have been done in one step. However the result of that would be a huge chain of actions which would make it
+unclear for the reader to understand.
+
+Convert the data to a new variable (dataN short for dataNeeded) and transform all the exponential values to uppercase so that
+it can be used in the function described above (this was done so that the function only has to  read letters like "M", instead of "m" and "M")
+```{r}
+dataN <- data %>% mutate(PROPDMGEXP =  toupper(PROPDMGEXP), CROPDMGEXP =  toupper(CROPDMGEXP)) 
+```
+
+Calculate the property & crop damage using the 'MultiplyConv' function that is described above
+```{r}
+dataN <- dataN %>% rowwise() %>% mutate(Propdmg = multiplyConv(PROPDMG, PROPDMGEXP), CropDmg = multiplyConv(CROPDMG, CROPDMGEXP))
+```
+
+Select columns that are needed for the following calculations.
+```{r}
+dataN <- dataN %>% select(EVTYPE, FATALITIES, INJURIES, Propdmg, CropDmg)
+```
+
+
+Calculate the total amount of fatalities per event type and arrange them descending (so that the ones with the highest amount of fatalities
+are at the top of the list). After that take the first ten values of that list and put them in a new variable so that we now have the ten event types
+with the highest fatalities.
+```{r}
+sumFata <- dataN %>% group_by(EVTYPE) %>% summarize(Fatalities = sum(FATALITIES)) %>% arrange(desc(Fatalities))
+sumFataTop <- sumFata[1:10,]
+```
+
+
+Calculate the total amount of injuries per event type and arrange them descending (so that the ones with the highest amount of injuries
+are at the top of the list). After that take the first ten values of that list and put them in a new variable so that we now have the ten event types
+with the highest injuries
+```{r}
+sumInj <- dataN %>% group_by(EVTYPE) %>% summarize(Injuries = sum(INJURIES)) %>% arrange(desc(Injuries))
+sumInjTop <- sumInj[1:10,]
+```
+
+Calculate the total amount of economical damage per event type by summarizing the total property & crop damage and arranging them in descending order (so that the ones with the highest amount of economical damage are at the top of the list). After that take the first ten values of that list and put them in a new variable so that we now have the ten event types with the highest economical damage.
+```{r}
+sumEcoDmg <- dataN %>% group_by(EVTYPE) %>%  summarize(EcoDmg = sum(CropDmg) + sum(Propdmg)) %>% arrange(desc(EcoDmg))
+sumEcoTop <- sumEcoDmg[1:10,]
+```
+
+
+##Results
+In this topic the questions will be named and then answered. Plots are created below the questions which are used to explain the answers.
+
+**Question 1:** Across the United States, which types of events are most harmful with respect to population health?
+
+**Answer:** Tornadoes and Heat are the two biggest contributors to fatalities and injuries to people in the US.
+
+This plot shows the top ten causes of fatalities.
+```{r}
+ggplot(data=sumFataTop, aes(x=EVTYPE, y=Fatalities)) + 
+    geom_bar(stat="identity") + xlab("Event type") + ylab("Total fatalities") + 
+    ggtitle("Fatalities Per Event Type") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+This plot shows the top ten causes of injuries
+```{r}
+ggplot(data=sumInjTop, aes(x=EVTYPE, y=Injuries)) + 
+    geom_bar(stat="identity") + xlab("Event type") + ylab("Total injuries") + 
+    ggtitle("Injuries Per Event Type") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+**Question 2:** Across the United States, which types of events have the greatest economic consequences?
+
+**Answer:** Floods have had the biggest economic impact in the United States. After floods, hurricanes, tornadoes and storm surges have had the highest impact on the economy.
+
+This plot shows the top ten causes of economic consequences
+```{r}
+ggplot(data=sumEcoTop, aes(x=EVTYPE, y=EcoDmg)) + 
+    geom_bar(stat="identity") + xlab("Event type") + ylab("Total injuries") + 
+    ggtitle("Economic damages By Event Type") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
