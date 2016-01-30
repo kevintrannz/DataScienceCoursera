@@ -1,13 +1,12 @@
 ---
 title: "Statistical inference course project | Part 1"
 author: "Mick van Hulst"
-date: "29 januari 2016"
+date: "30 Jan 2016"
 output: pdf_document
 ---
 
 ##Synopsis
-This document contains the first part of the project for the statistical inference class. In this first part of the project a few simulations were done
-to explore the inference. In the second part a inferential data analysis was done.
+This document contains the first part of the project for the statistical inference class. In this first part of the project a few simulations were done to explore the inference. In the second part a inferential data analysis was done.
 
 ##Task
 Simulating an exponential distribution in R can be done using `rexp(n, lambda)`. In this case lambda is the rate parameter. The mean of
@@ -104,7 +103,3 @@ qqline(meanExp, col = 2)
 ```
 
 **Answer:** Due to the central limit theorem, the distribution of averages of 40 exponentials is close to a normal distribution.
-
-
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
